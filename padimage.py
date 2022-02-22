@@ -1,6 +1,6 @@
 from PIL import Image
 import os
-directory = 'benign500'
+directory = 'IMAGES/malware'
 
 
 
@@ -18,6 +18,6 @@ if __name__ == '__main__':
     for filename in os.listdir(directory):
         if filename.endswith(".jpg"):
           im = Image.open(directory + "/" + filename)
-          new_image = add_margin(im, 107, 111, 107, 111, (255, 255, 255))
-          newfilepath = 'resizedbenign/' + filename
-          new_image.save(newfilepath, quality=100)
+          new_image = add_margin(im, 13, 11, 13, 12, (0,255,0))
+          newfilepath = 'IMAGES/malware_32/' + filename
+          new_image.save(newfilepath, quality=100, subsampling=0)

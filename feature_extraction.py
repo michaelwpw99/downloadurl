@@ -4,6 +4,7 @@ import os
 import hashlib
 import array
 import math
+from functools import reduce
 
 def get_md5(fname):
     hash_md5 = hashlib.md5()
@@ -110,9 +111,13 @@ def extract_infos(fpath):
     res.append(pe.OPTIONAL_HEADER.LoaderFlags)
     res.append(pe.OPTIONAL_HEADER.NumberOfRvaAndSizes)
     res.append(len(pe.sections))
-    entropy = map(lambda x:x.get_entropy(), pe.sections)
+    entropy = list(map(lambda x:x.get_entropy(), pe.sections))
+    
+    #print(entropy)
+    #print(sum(entropy))
+    
     try:
-        res.append(sum(entropy)/float(len(list(entropy))))
+        res.append(float(sum(list(entropy)))//float(len(list(entropy))))
     except ZeroDivisionError:
         print('div 0')
         res.append(0)
@@ -127,7 +132,7 @@ def extract_infos(fpath):
     except ValueError:
         res.append(0)
         
-    raw_sizes = map(lambda x:x.SizeOfRawData, pe.sections)
+    raw_sizes = list(map(lambda x:x.SizeOfRawData, pe.sections))
     try:
         res.append(sum(raw_sizes)/float(len(list(raw_sizes))))
     except ZeroDivisionError:
@@ -141,7 +146,7 @@ def extract_infos(fpath):
         res.append(max(raw_sizes))
     except ValueError:
         res.append(0)
-    virtual_sizes = map(lambda x:x.Misc_VirtualSize, pe.sections)
+    virtual_sizes = list(map(lambda x:x.Misc_VirtualSize, pe.sections))
     
     try:
         res.append(sum(virtual_sizes)/float(len(list(virtual_sizes))))
@@ -176,7 +181,7 @@ def extract_infos(fpath):
     resources= get_resources(pe)
     res.append(len(resources))
     if len(resources)> 0:
-        entropy = map(lambda x:x[0], resources)
+        entropy = list(map(lambda x:x[0], resources))
         
         try:
             res.append(sum(entropy)/float(len(list(entropy))))
@@ -227,7 +232,7 @@ def extract_infos(fpath):
     return res
 
 if __name__ == '__main__':
-    output = "data.csv"
+    output = "dataNEWTEST.csv"
     csv_delimiter = "|"
     columns = [
         "Name",
