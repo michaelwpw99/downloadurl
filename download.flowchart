@@ -1,0 +1,41 @@
+op2=>operation: import scrapy
+op4=>operation: url_list = []
+op6=>operation: name = 'download'
+op8=>operation: allowed_domains = ['download.cnet.com']
+op10=>operation: start_urls = ['https://download.cnet.com/drivers/windows']
+st13=>start: start parse
+io15=>inputoutput: input: self, response
+cond19=>operation: output: (yield response.follow(link.get(), callback=self.parse_links)) while  link in response.css('.c-productCard_link ::attr(href)')
+op31=>operation: nextpage = response.css('.c-navigationPagination_item--next ::attr(href)').get()
+cond34=>condition: if (nextpage is not None)
+op38=>operation: nextpage = response.urljoin(nextpage)
+io40=>inputoutput: output: (yield scrapy.Request(nextpage, callback=self.parse))
+e45=>end: end parse
+st49=>start: start parse_links
+io51=>inputoutput: input: self, response
+op54=>operation: buttontext = response.css('.c-productActionButton_text::text').get()
+op56=>operation: dllink = response.css('.c-globalButton a::attr(href)').get()
+op58=>operation: full_url = response.urljoin(dllink)
+cond61=>operation: output: (yield {'Button Text': buttontext, 'Full URL': full_url}) if  (buttontext == 'Download Now')
+e71=>end: end parse_links
+
+op2->op4
+op4->op6
+op6->op8
+op8->op10
+op10->st13
+st13->io15
+io15->cond19
+cond19->op31
+op31->cond34
+cond34(yes)->op38
+op38->io40
+io40->e45
+e45->st49
+st49->io51
+io51->op54
+op54->op56
+op56->op58
+op58->cond61
+cond61->e71
+cond34(no)->e45
