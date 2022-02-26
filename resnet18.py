@@ -7,6 +7,7 @@ import tensorflow.keras.preprocessing as tf
 from torch.optim.lr_scheduler import StepLR
 import torch.optim as optim
 from torchvision import transforms
+from sklearn.metrics import f1_score 
 test_dir = "IMAGES_224x224_SPLIT/val"
 train_dir = "IMAGES_224x224_SPLIT/train"
 IMG_SIZE = (224, 224)
@@ -88,12 +89,15 @@ if __name__ == "__main__":
             
         epoch_loss = running_loss / len(test_loader)
         epoch_acc = running_corrects.double() / len(test_loader)
+        f1score = f1_score(labels.data, preds)
         print("Train: Loss: {:.4f} Acc: {:.4f}"
     " Val: Loss: {:.4f}"
-    " Acc: {:.4f}".format(train_epoch_loss,
+    " Acc: {:.4f}"
+    " F1 Score: {:.4f}".format(train_epoch_loss,
                           train_epoch_acc,
                           epoch_loss,
-                          epoch_acc))
+                          epoch_acc,
+                          f1score))
             
     torch.save(model.state_dict(), "./resnet34.pt")
     
