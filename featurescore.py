@@ -6,6 +6,7 @@ import numpy as np
 import sklearn.ensemble as ske
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.feature_selection import SelectFromModel
+from sklearn.ensemble import RandomForestClassifier
 import time
 from sklearn import tree, linear_model
 import sys
@@ -214,23 +215,37 @@ def runalgorithms(Xtrain, ytrain, Xtest, ytest):
 
     winner = max(results, key=results.get)
 
-    #svmalg = svm.SVC(kernel='linear')
-    #svmalg.fit(Xtrain, ytrain)
-    #y_pred = svmalg.predict(Xtest)
-    #svmacc = metrics.accuracy_score(ytest, y_pred)
-    #print("SVM: %f %%" % (svmacc*100))
-
     neigh = KNeighborsClassifier(n_neighbors=7, algorithm='ball_tree')
     neigh.fit(Xtrain, ytrain)
     ypred = neigh.predict(Xtest)
-    knnacc = metrics.accuracy_score(ytest, ypred) 
-    print("K-Nearest Neighbours: %f %%" % (knnacc*100))
+    knnacc = metrics.accuracy_score(ytest, ypred)
+    knnf1 = metrics.f1_score(ytest, ypred)
+    print("K-Nearest Neighbours Acc: %f %%" % (knnacc*100))
+    print("K-Nearest Neighbours F1: %f %%" % (knnf1*100))
 
     nbayes = GaussianNB()
     nbayes.fit(Xtrain, ytrain)
     nbayes_pred = nbayes.predict(Xtest)
     nbayes_acc = metrics.accuracy_score(ytest, nbayes_pred)
-    print("Naive Bayes: %f %%" % (nbayes_acc*100))
+    nbayesf1 = metrics.f1_score(ytest, nbayes_pred)
+    print("Naive Bayes Acc: %f %%" % (nbayes_acc*100))
+    print("Naive Bayes F1: %f %%" % (nbayesf1*100))
+    
+    clf = RandomForestClassifier(max_depth=10, random_state=0)
+    clf.fit(Xtrain, ytrain)
+    ypred = clf.predict(Xtest)
+    rfacc = metrics.accuracy_score(ytest, ypred)
+    rff1 = metrics.f1_score(ytest, ypred)
+    print("Random Forest Acc: %f %%" % (rfacc*100))
+    print("Random Forest F1: %f %%" % (rff1*100))
+    
+    svmalg = svm.SVC(kernel='linear')
+    svmalg.fit(Xtrain, ytrain)
+    y_pred = svmalg.predict(Xtest)
+    svmacc = metrics.accuracy_score(ytest, y_pred)
+    svmf1 = metrics.f1_score(ytest, y_pred)
+    print("SVM Acc: %f %%" % (svmacc*100))
+    print("SVM F1: %f %%" % (svmf1*100))
 
 
 
