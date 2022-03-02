@@ -100,7 +100,7 @@ def getpixels(record, max_values, min_values):
     
     return pixels
     
-    
+#source: https://medium.com/lifeandtech/convert-csv-file-to-images-309b6fdb8c49
 def convert2image(img):
     img = img.reshape(6,9)  # dimensions of the image
     image = np.zeros((6,9,3))  # empty matrix
