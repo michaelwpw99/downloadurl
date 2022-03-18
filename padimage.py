@@ -19,5 +19,5 @@ if __name__ == '__main__':
         if filename.endswith(".jpg"):
           im = Image.open(directory + "/" + filename)
           new_image = add_margin(im, 13, 11, 13, 12, (0,255,0))
-          newfilepath = 'IMAGES/malware_32/' + filename
+          newfilepath = 'IMAGES/malware/train' + filename
           new_image.save(newfilepath, quality=100, subsampling=0)
