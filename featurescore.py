@@ -37,6 +37,7 @@ def getTrainTestData(dataset,split):
     
     return training,testing
 
+###Code from Maynier, 2016 //////
 data = read_csv('NEWDATASET.csv')
 feat = data.keys()
 feat_labels = np.asarray(feat)
@@ -49,6 +50,7 @@ Xtrain = train[:,1:55]
 ytrain = train[:,55] 
 Xtest = test[:,1:55] 
 ytest = test[:,55]
+////////////////////////////////
 
 
 def getAccuracy(pre,ytest): 
